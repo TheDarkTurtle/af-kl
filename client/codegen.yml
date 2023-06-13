@@ -1,0 +1,11 @@
+schema: "../server/src/schema/types.graphql"
+documents: "./src/**/*.queries.ts"
+generates:
+  ./src/app/__generated__/types.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-apollo-angular"
+config:
+  addExplicitOverride: true
+  apolloAngularVersion: 5

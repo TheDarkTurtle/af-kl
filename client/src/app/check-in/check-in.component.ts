@@ -1,15 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { GraphQLModule } from '../graphql.module';
 import { Subscription } from 'rxjs';
-import { Apollo } from 'apollo-angular';
-import { BOOKING_QUERY } from './check-in.queries';
+import { BookingGQL } from '../__generated__/types';
 
 @Component({
   selector: 'app-check-in',
   standalone: true,
-  imports: [CommonModule, GraphQLModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './check-in.component.html',
   styleUrls: ['./check-in.component.scss'],
 })
@@ -21,18 +19,15 @@ export class CheckInComponent implements OnDestroy {
     name: '',
   });
 
-  constructor(private apollo: Apollo) {}
+  constructor(private bookingGQL: BookingGQL) {}
 
   ngOnDestroy() {
     this.querySubscription?.unsubscribe();
   }
 
   onSubmit() {
-    this.querySubscription = this.apollo
-      .watchQuery<any>({
-        query: BOOKING_QUERY,
-        variables: this.loginForm.getRawValue(),
-      })
+    this.querySubscription = this.bookingGQL
+      .watch(this.loginForm.getRawValue())
       .valueChanges.subscribe(({ data }) => {
         console.log(data.booking);
       });
