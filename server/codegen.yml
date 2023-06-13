@@ -7,3 +7,5 @@ generates:
 config:
   useIndexSignature: true
   contextType: "../index.js#Context"
+  mappers:
+      Booking: ../rest/booking-types.js#BookingDTO

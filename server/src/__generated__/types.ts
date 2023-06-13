@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { BookingDTO } from '../rest/booking-types.js';
 import { Context } from '../index.js';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -105,7 +106,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Booking: ResolverTypeWrapper<Booking>;
+  Booking: ResolverTypeWrapper<BookingDTO>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -113,7 +114,7 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Booking: Booking;
+  Booking: BookingDTO;
   Boolean: Scalars['Boolean']['output'];
   Query: {};
   String: Scalars['String']['output'];
