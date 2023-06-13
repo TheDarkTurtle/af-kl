@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
-    "dev": "nodemon --exec ts-node-esm ./src/index.ts",
+    "codegen": "graphql-codegen --config codegen.yml",
+    "compile": "npm run codegen && tsc",
+    "watch-graph": "npm run codegen -- --watch 'src/schema/*.graphql'",
+    "watch-ts": "nodemon --exec ts-node-esm ./src/index.ts",
+    "dev": "concurrently \"npm:watch-graph\" \"npm:watch-ts\"",
     "start": "npm run compile && node ./dist/index.js"
   },
   "keywords": [],
@@ -13,7 +16,11 @@
   "license": "ISC",
   "type": "module",
   "devDependencies": {
+    "@graphql-codegen/cli": "4.0.1",
+    "@graphql-codegen/typescript": "4.0.0",
+    "@graphql-codegen/typescript-resolvers": "4.0.0",
     "@types/node": "^20.3.0",
+    "concurrently": "^8.2.0",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.3"

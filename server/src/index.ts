@@ -7,7 +7,10 @@ const typeDefs = readFileSync("./src/schema/types.graphql", {
   encoding: "utf-8",
 });
 
-const server = new ApolloServer({
+export interface Context {
+}
+
+const server = new ApolloServer<Context>({
   typeDefs,
   resolvers,
 });
