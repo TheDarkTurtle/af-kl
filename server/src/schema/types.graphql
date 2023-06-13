@@ -1,0 +1,7 @@
+type Query {
+  booking(code: String!, name: String!): Booking
+}
+
+type Booking {
+  code: String
+}
