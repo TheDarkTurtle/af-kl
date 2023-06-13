@@ -8,18 +8,18 @@
     code in your booking confirmation.
   </p>
 
-  <form class="flex flex-col gap-4">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
     <div class="flex flex-col gap-1">
       <label for="code" class="text-xl font-semibold">Booking code</label>
-      <input id="code" name="code" type="text" class="form-input text-xl" />
+      <input id="code" formControlName="code" type="text" class="form-input text-xl" />
     </div>
 
     <div class="flex flex-col gap-1 text-xl">
       <label for="name" class="text-xl font-semibold">Family name</label>
-      <input id="name" name="name" type="text" class="form-input text-xl" />
+      <input id="name" formControlName="name" type="text" class="form-input text-xl" />
     </div>
 
-    <button type="button" class="mt-2 p-3 bg-red-600 hover:bg-red-700">
+    <button type="submit" class="mt-2 p-3 bg-red-600 hover:bg-red-700">
       <span class="text-xl text-white">Retrieve booking</span>
     </button>
   </form>
