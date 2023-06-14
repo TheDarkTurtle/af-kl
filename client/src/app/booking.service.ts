@@ -5,6 +5,7 @@ import {
   BookingQueryVariables,
 } from './__generated__/types';
 import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class BookingService {
   error$ = new BehaviorSubject('');
   loading$ = new BehaviorSubject(false);
 
-  constructor(private bookingGQL: BookingGQL) {}
+  constructor(private bookingGQL: BookingGQL, private router: Router) {}
 
   retrieveBooking(args: BookingQueryVariables) {
     this.loading$.next(true);
@@ -34,6 +35,7 @@ export class BookingService {
 
         if (data.booking) {
           this.booking$.next(data.booking);
+          this.router.navigateByUrl('/booking');
         }
       });
   }
