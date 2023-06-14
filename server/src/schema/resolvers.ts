@@ -7,6 +7,10 @@ export const resolvers: Resolvers = {
     booking: async (_, args, { dataSources }) => {
       const booking = await dataSources.bookingAPI.getBooking(args.code);
 
+      if (!validateUserInputs(args)) {
+        throw new GraphQLError("Wrong format");
+      }
+
       if (!validateQueryBookingArgs(args, booking)) {
         throw new GraphQLError("Booking not found! Try PZIGZ3 / HESP");
       }
@@ -26,6 +30,18 @@ function validateQueryBookingArgs(args: QueryBookingArgs, booking: BookingDTO) {
 
   const mainPassenger = booking.passengers.find(({ id }) => id === 1);
   if (args.name !== mainPassenger?.lastName) {
+    return false;
+  }
+
+  return true;
+}
+
+function validateUserInputs(args: QueryBookingArgs) {
+  if (!/^[2-9a-zA-Z]{5,6}$/.test(args.code)) {
+    return false;
+  }
+
+  if (!/^.{2,30}$/.test(args.name)) {
     return false;
   }
 
