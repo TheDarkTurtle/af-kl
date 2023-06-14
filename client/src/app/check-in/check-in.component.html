@@ -15,12 +15,35 @@
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
     <div class="flex flex-col gap-1">
       <label for="code" class="text-xl font-semibold">Booking code</label>
-      <input id="code" formControlName="code" type="text" class="form-input text-xl" />
+      <input id="code" formControlName="code" type="text" class="form-input text-xl"  [ngClass]="{ 'border-red-400': code.touched && code.invalid }" />
+
+      <div *ngIf="code.touched && code.errors?.['required']" class="text-sm text-red-700">
+        This field is required.
+      </div>
+      <div *ngIf="code.errors?.['minlength']" class="text-sm text-red-700">
+        Should contain at least {{ code.errors?.['minlength'].requiredLength }} characters
+      </div>
+      <div *ngIf="code.errors?.['maxlength']" class="text-sm text-red-700">
+        Should contain no more than {{ code.errors?.['maxlength'].requiredLength }} characters
+      </div>
+      <div *ngIf="code.errors?.['pattern']" class="text-sm text-red-700">
+        Should contain only letters or numbers between 2 and 9
+      </div>
     </div>
 
     <div class="flex flex-col gap-1 text-xl">
       <label for="name" class="text-xl font-semibold">Family name</label>
-      <input id="name" formControlName="name" type="text" class="form-input text-xl" />
+      <input id="name" formControlName="name" type="text" class="form-input text-xl" [ngClass]="{ 'border-red-400': name.touched && name.invalid }" />
+
+      <div *ngIf="name.touched && name.errors?.['required']" class="text-sm text-red-700">
+        This field is required.
+      </div>
+      <div *ngIf="name.errors?.['minlength']" class="text-sm text-red-700">
+        Should contain at least {{ name.errors?.['minlength'].requiredLength }} characters
+      </div>
+      <div *ngIf="name.errors?.['maxlength']" class="text-sm text-red-700">
+        Should contain no more than {{ name.errors?.['maxlength'].requiredLength }} characters
+      </div>
     </div>
 
     <button type="submit" [disabled]="isLoading$ | async" class="h-12 mt-2 bg-red-600 hover:bg-red-700 disabled:bg-red-600">
