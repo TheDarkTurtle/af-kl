@@ -19,8 +19,12 @@
       <input id="name" formControlName="name" type="text" class="form-input text-xl" />
     </div>
 
-    <button type="submit" class="mt-2 p-3 bg-red-600 hover:bg-red-700">
-      <span class="text-xl text-white">Retrieve booking</span>
+    <button type="submit" [disabled]="isLoading" class="h-12 mt-2 bg-red-600 hover:bg-red-700 disabled:bg-red-600">
+      <app-loading-spinner *ngIf="isLoading; else text" />
+
+      <ng-template #text>
+        <span class="text-xl text-white">Retrieve booking</span>
+      </ng-template>
     </button>
   </form>
 </div>
