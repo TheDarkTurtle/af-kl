@@ -20,6 +20,7 @@ export class CheckInComponent implements OnDestroy {
     name: '',
   });
 
+  error = '';
   isLoading = false;
 
   constructor(private bookingGQL: BookingGQL) {}
@@ -30,11 +31,20 @@ export class CheckInComponent implements OnDestroy {
 
   onSubmit() {
     this.isLoading = true;
+    this.error = '';
 
     this.querySubscription = this.bookingGQL
-      .watch(this.loginForm.getRawValue())
-      .valueChanges.subscribe(({ data }) => {
+      .watch(this.loginForm.getRawValue(), {
+        errorPolicy: 'all',
+        fetchPolicy: 'no-cache',
+      })
+      .valueChanges.subscribe(({ data, errors }) => {
         this.isLoading = false;
+
+        if (errors?.length) {
+          this.error = errors[0].message;
+        }
+
         console.log(data.booking);
       });
   }
