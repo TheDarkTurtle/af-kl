@@ -1,9 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { BookingGQL } from '../__generated__/types';
+import { Observable } from 'rxjs';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+import { BookingService } from '../booking.service';
 
 @Component({
   selector: 'app-check-in',
@@ -12,40 +12,23 @@ import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.comp
   templateUrl: './check-in.component.html',
   styleUrls: ['./check-in.component.scss'],
 })
-export class CheckInComponent implements OnDestroy {
-  private querySubscription: Subscription | undefined;
-
+export class CheckInComponent implements OnInit {
   loginForm = new FormBuilder().nonNullable.group({
     code: '',
     name: '',
   });
 
-  error = '';
-  isLoading = false;
+  error$: Observable<string>;
+  isLoading$: Observable<boolean>;
 
-  constructor(private bookingGQL: BookingGQL) {}
+  constructor(private bookingService: BookingService) {}
 
-  ngOnDestroy() {
-    this.querySubscription?.unsubscribe();
+  ngOnInit() {
+    this.error$ = this.bookingService.error$;
+    this.isLoading$ = this.bookingService.loading$;
   }
 
   onSubmit() {
-    this.isLoading = true;
-    this.error = '';
-
-    this.querySubscription = this.bookingGQL
-      .watch(this.loginForm.getRawValue(), {
-        errorPolicy: 'all',
-        fetchPolicy: 'no-cache',
-      })
-      .valueChanges.subscribe(({ data, errors }) => {
-        this.isLoading = false;
-
-        if (errors?.length) {
-          this.error = errors[0].message;
-        }
-
-        console.log(data.booking);
-      });
+    this.bookingService.retrieveBooking(this.loginForm.getRawValue());
   }
 }

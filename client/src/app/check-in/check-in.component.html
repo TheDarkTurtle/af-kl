@@ -8,8 +8,8 @@
     code in your booking confirmation.
   </p>
 
-  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 p-3 rounded" role="alert">
-    <span class="">{{ error }}</span>
+  <div *ngIf="error$ | async" class="bg-red-100 border border-red-400 text-red-700 p-3 rounded" role="alert">
+    <span class="">{{ error$ | async }}</span>
   </div>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
@@ -23,8 +23,8 @@
       <input id="name" formControlName="name" type="text" class="form-input text-xl" />
     </div>
 
-    <button type="submit" [disabled]="isLoading" class="h-12 mt-2 bg-red-600 hover:bg-red-700 disabled:bg-red-600">
-      <app-loading-spinner *ngIf="isLoading; else text" />
+    <button type="submit" [disabled]="isLoading$ | async" class="h-12 mt-2 bg-red-600 hover:bg-red-700 disabled:bg-red-600">
+      <app-loading-spinner *ngIf="isLoading$ | async; else text" />
 
       <ng-template #text>
         <span class="text-xl text-white">Retrieve booking</span>
