@@ -9,3 +9,7 @@ config:
   contextType: "../index.js#Context"
   mappers:
       Booking: ../rest/booking-types.js#BookingDTO
+      Passenger: ../rest/booking-types.js#PassengerDTO
+      ContactDetail: ../rest/booking-types.js#ContactDetailDTO
+      Connection: ../rest/booking-types.js#ConnectionDTO
+      Segment: ../rest/booking-types.js#SegmentDTO

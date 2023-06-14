@@ -1,7 +1,60 @@
 type Query {
-  booking(code: String!, name: String!): Booking
+  booking(code: String!, name: String!): Booking!
 }
 
 type Booking {
-  code: String
+  code: String!
+  passengers: [Passenger!]
+  contactDetails: [ContactDetail!]
+  itinerary: Itinerary!
+}
+
+type Passenger {
+  firstName: String!
+  lastName: String!
+  title: String!
+}
+
+type ContactDetail {
+  type: String!
+  value: String!
+}
+
+type Itinerary {
+  type: String!
+  connections: [Connection!]!
+}
+
+type Connection {
+  duration: String!
+  origin: Airport!
+  destination: Airport!
+  segments: [Segment!]!
+}
+
+type Airport {
+  code: String!
+  name: String!
+  city: String!
+  country: String!
+}
+
+type Segment {
+  origin: Airport!
+  destination: Airport!
+  flight: Flight!
+}
+
+type Flight {
+  number: String!
+  carrier: String!
+  status: String!
+  numberOfStops: Int!
+  cabin: String!
+  equipment: String!
+  checkInStart: String!
+  checkInEnd: String!
+  scheduledDeparture: String!
+  scheduledArrival: String!
+  arrivalTerminal: String!
 }

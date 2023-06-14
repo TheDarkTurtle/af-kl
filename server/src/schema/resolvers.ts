@@ -1,6 +1,15 @@
-import { QueryBookingArgs, Resolvers } from "__generated__/types.js";
+import {
+  Airport,
+  Flight,
+  QueryBookingArgs,
+  Resolvers,
+} from "__generated__/types.js";
 import { GraphQLError } from "graphql";
-import { BookingDTO } from "rest/booking-types.js";
+import {
+  AirportDTO,
+  BookingDTO,
+  MarketingFlightDTO,
+} from "rest/booking-types.js";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -20,6 +29,22 @@ export const resolvers: Resolvers = {
   },
   Booking: {
     code: (parent) => parent.bookingCode,
+  },
+  Passenger: {
+    title: (parent) => parent.title.name,
+  },
+  ContactDetail: {
+    type: (parent) => parent["@class"],
+    value: (parent) => parent.address.toLocaleLowerCase(),
+  },
+  Connection: {
+    origin: (parent) => mapAirport(parent.origin),
+    destination: (parent) => mapAirport(parent.destination),
+  },
+  Segment: {
+    origin: (parent) => mapAirport(parent.departFrom),
+    destination: (parent) => mapAirport(parent.arriveOn),
+    flight: (parent) => mapFlight(parent.marketingFlight),
   },
 };
 
@@ -46,4 +71,29 @@ function validateUserInputs(args: QueryBookingArgs) {
   }
 
   return true;
+}
+
+function mapAirport(source: AirportDTO): Airport {
+  return {
+    code: source.IATACode,
+    name: source.name,
+    city: source.city.name,
+    country: source.city.country.name,
+  };
+}
+
+function mapFlight(source: MarketingFlightDTO): Flight {
+  return {
+    arrivalTerminal: source.operatingFlight.arrivalTerminal.name,
+    cabin: source.operatingFlight.cabin.name,
+    carrier: source.carrier.name,
+    equipment: source.operatingFlight.equipment.name,
+    number: source.carrier.code + source.number,
+    numberOfStops: source.numberOfStops,
+    status: source.status.name,
+    checkInStart: source.operatingFlight.localCheckInStart,
+    checkInEnd: source.operatingFlight.localCheckInEnd,
+    scheduledArrival: source.operatingFlight.localScheduledArrival,
+    scheduledDeparture: source.operatingFlight.localScheduledDeparture,
+  };
 }
