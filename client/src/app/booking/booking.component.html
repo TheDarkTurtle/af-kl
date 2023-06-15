@@ -1,3 +1,67 @@
-<div *ngIf="booking$ | async as booking">
-    <div> {{ booking.code }} </div>
- </div>
+<div
+  *ngIf="booking$ | async as booking"
+  class="booking flex flex-col gap-8 max-w-full mx-auto p-8"
+>
+  <div class="text-center">
+    <span class="text-2xl font-semibold">Reference: </span>
+    <span class="text-2xl">{{ booking.code }}</span>
+  </div>
+
+  <div
+    *ngFor="let connection of booking.itinerary.connections"
+    class="flex flex-col p-8 rounded-lg shadow-xl"
+  >
+    <div class="text-xl">
+      {{ connection.segments[0].flight.scheduledDeparture | date : "EEEE, MMMM d" }}
+    </div>
+    <div class="text-2xl font-semibold">
+      {{ connection.origin.city }} to {{ connection.destination.city }}
+    </div>
+
+    <div *ngFor="let segment of connection.segments" class="flex gap-4 mt-8">
+      <div class="flex flex-col justify-between">
+        <span class="text-xl font-semibold">{{ segment.flight.scheduledDeparture | date : "h:mm a" }}</span>
+        <span class="text-xl font-semibold">{{ segment.flight.scheduledArrival | date : "h:mm a" }}</span>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <span class="text-xl">{{ segment.origin | airport }}</span>
+
+        <div class="flex justify-between">
+          <span class="text-base">{{ segment.flight.number }}, operated by {{ segment.flight.carrier }}</span>
+          <button (click)="toggleDetails()" class="text-base text-blue-800">Details</button>
+        </div>
+
+        <div *ngIf="showDetails" class="flex flex-col p-2 bg-slate-200 rounded-md">
+          <span class="text-base">Status: {{ segment.flight.status }}</span>
+          <span class="text-base">Duration: {{ connection.duration }} min.</span>
+          <span class="text-base">Class: {{ segment.flight.cabin }}</span>
+          <span class="text-base">Number of stops: {{ segment.flight.numberOfStops }}</span>
+          <span class="text-base">Aircraft: {{ segment.flight.equipment }}</span>
+          <span class="text-base">Check-in starts at {{ segment.flight.checkInStart | date : "h:mm a" }}</span>
+          <span class="text-base">Check-in ends at {{ segment.flight.checkInEnd | date : "h:mm a" }}</span>
+        </div>
+
+        <span class="text-xl">{{ segment.destination | airport }} - Terminal {{ segment.flight.arrivalTerminal }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap gap-8">
+    <div class="flex-1 flex flex-col gap-2 p-8 rounded-lg shadow-xl">
+      <h2 class="text-2xl font-semibold">Passengers</h2>
+
+      <div *ngFor="let passenger of booking.passengers">
+        <span class="text-xl">{{ passenger | pax }}</span>
+      </div>
+    </div>
+
+    <div class="flex-1 flex flex-col gap-2 p-8 rounded-lg shadow-xl">
+      <h2 class="text-2xl font-semibold">Contacts</h2>
+
+      <div *ngFor="let contact of booking.contactDetails">
+        <span class="text-xl">{{ contact | contact }}</span>
+      </div>
+    </div>
+  </div>
+</div>
